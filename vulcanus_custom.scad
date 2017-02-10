@@ -2,7 +2,7 @@
 include <2020bar.scad>
 include <vulcanus_params.scad>
 include <Thread_Library.scad>
-
+include <smallbridges/scad/vslot.scad>
 make_screws = 1;
 
 gray = [0.8, 0.8, 0.8];
@@ -24,11 +24,13 @@ vulcanus_z_steppers(frame_cross_length, bed_stage_level);
 module vulcanus_frame(tall_piece = frame_height, cross_piece = frame_cross_length) {
     side_length = cross_piece + extruded_2020_width;
     
+    module vertical_support() { render() vslot20x20(tall_piece); }
+    
     color(frame_color) {
-        translate([-side_length/2, -side_length/2, 0]) extruded_2020(tall_piece);
-        translate([side_length/2, -side_length/2, 0]) extruded_2020(tall_piece);
-        translate([-side_length/2, side_length/2, 0]) extruded_2020(tall_piece);
-        translate([side_length/2, side_length/2, 0]) extruded_2020(tall_piece);
+        translate([-side_length/2, -side_length/2, 0]) vertical_support();
+        translate([side_length/2, -side_length/2, 0]) vertical_support();
+        translate([-side_length/2, side_length/2, 0]) vertical_support();
+        translate([side_length/2, side_length/2, 0]) vertical_support();
     }
         
     // Bottom stage (the base)
@@ -45,18 +47,20 @@ module vulcanus_frame(tall_piece = frame_height, cross_piece = frame_cross_lengt
 }
 
 module vulcanus_x_piece(height = 0, cross_piece = frame_cross_length, corner = 1, tricorner = 1, rotate=0) {
+    module draw_cross_piece() { render() vslot20x20(cross_piece); }
+
     translate([0, 0, height]) {
         piece_width = cross_piece;
         color(frame_color) {
             // Place the cross-pieces
             translate([-piece_width/2, -piece_width/2 - extruded_2020_width/2, extruded_2020_width/2])
-                rotate([0, 90, 0]) extruded_2020(cross_piece);
+                rotate([0, 90, 0]) vslot20x20(cross_piece);
             translate([-piece_width/2, piece_width/2 + extruded_2020_width/2, extruded_2020_width/2])
-                rotate([0, 90, 0]) extruded_2020(cross_piece);
+                rotate([0, 90, 0]) vslot20x20(cross_piece);
             translate([-piece_width/2 - extruded_2020_width / 2, piece_width/2, extruded_2020_width/2])
-                rotate([90, 0, 0]) extruded_2020(cross_piece);
+                rotate([90, 0, 0]) vslot20x20(cross_piece);
             translate([piece_width/2 + extruded_2020_width / 2, piece_width/2, extruded_2020_width/2])
-                rotate([90, 0, 0]) extruded_2020(cross_piece);
+                rotate([90, 0, 0]) vslot20x20(cross_piece);
         }
         
         // Draw the corners and rotate (upside down) if needed

@@ -1,0 +1,3 @@
+[submodule "smallbridges"]
+	path = smallbridges
+	url = https://github.com/fponticelli/smallbridges
