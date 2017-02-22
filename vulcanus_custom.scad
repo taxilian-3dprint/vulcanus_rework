@@ -1,8 +1,10 @@
+extruded_2020_width=20;
 
-include <2020bar.scad>
 include <vulcanus_params.scad>
 include <Thread_Library.scad>
 include <smallbridges/scad/vslot.scad>
+include <V-Slot.scad>
+use <extrusion.scad>
 make_screws = 1;
 
 gray = [0.8, 0.8, 0.8];
@@ -11,7 +13,8 @@ magenta = [0.9,0,0.9];
 
 vulcanus_frame();
 vulcanus_corexy_level(frame_cross_length, corexy_stage_level);
-vulcanus_corexy_yrods(frame_cross_length, corexy_stage_level);
+//vulcanus_corexy_yrods(frame_cross_length, corexy_stage_level);
+vulcanus_corexy_slide(frame_cross_length, top_stage_level);
 vulcanus_bed_level(frame_cross_length, bed_stage_level);
 
 color(rod_color) vulcanus_z_rods(frame_cross_length, top_level=corexy_stage_level);
@@ -44,6 +47,10 @@ module vulcanus_frame(tall_piece = frame_height, cross_piece = frame_cross_lengt
     
     // Top stage (the roof)
     vulcanus_x_piece(top_stage_level, cross_piece, rotate=1);
+}
+
+module vslot20x20(length) {
+    2020_extrusion(length=length);
 }
 
 module vulcanus_x_piece(height = 0, cross_piece = frame_cross_length, corner = 1, tricorner = 1, rotate=0) {
@@ -87,22 +94,22 @@ module vulcanus_corexy_level(cross_piece=frame_cross_length, base_level = 0) {
     translate([0,0,base_level]) {
         translate([-cross_piece/2,cross_piece/2,0]) {
             // Motor mount left and stepper
-            color(motormount_color) motor_left();
-            translate([extruded_2020_width + 1, -extruded_2020_width - 1, 50]) color(stepper_color) NEMA17_full();
+            //color(motormount_color) motor_left();
+            //translate([extruded_2020_width + 1, -extruded_2020_width - 1, 50]) color(stepper_color) NEMA17_full();
         }
         translate([cross_piece/2,cross_piece/2,0]) {
             // Motor mount right and stepper
-            color(motormount_color) motor_right();
-            translate([-extruded_2020_width - 1, -extruded_2020_width - 1, 50]) color(stepper_color) NEMA17_full();
+            //color(motormount_color) motor_right();
+            //translate([-extruded_2020_width - 1, -extruded_2020_width - 1, 50]) color(stepper_color) NEMA17_full();
         }
     
         translate([-cross_piece/2,-cross_piece/2,0]) {
             // Idler left
-            color(motormount_color) idler_left();
+            //color(motormount_color) idler_left();
         }
         translate([cross_piece/2,-cross_piece/2,0]) {
             // Idler right
-            color(motormount_color) idler_right();
+            //color(motormount_color) idler_right();
         }
         // Draw the z smooth rod holders and the lead screw top guide
         translate([0,-cross_piece/2,0]) draw_side();
@@ -118,6 +125,20 @@ module vulcanus_corexy_yrods(cross_piece=frame_cross_length, base_level = 0) {
     translate([0,0,base_level]) {
         y_rod();
         mirror([1,0,0]) y_rod();
+    }
+}
+
+module vulcanus_corexy_slide(cross_piece=frame_cross_length, base_level = 0) {
+    module draw_gantry() {
+        translate([0, frame_cross_length/2+10,10]) rotate([0,0,180]) linear_gantry();
+    }
+    
+    translate([0,0,base_level - 40]) {
+        mirror([0,0,0]) draw_gantry();
+        mirror([0,1,0]) draw_gantry();
+    
+        translate([-20,(cross_piece-20)/2,10]) rotate([90,0,0]) color(frame_color) vslot20x20(cross_piece - 20);
+        translate([-20,0,10]) rotate([0,0,-90]) linear_gantry();
     }
 }
 

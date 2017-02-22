@@ -24,7 +24,7 @@ xy_rod_diameter = 10;
 x_rod_length = 511;
 y_rod_length = 537;
 
-corexy_stage_level = frame_height - extruded_2020_width - 85;
+corexy_stage_level = frame_height - extruded_2020_width - 80;
 top_stage_level = frame_height - extruded_2020_width;
 
 
