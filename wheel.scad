@@ -1,6 +1,6 @@
 
-$fa = 0.5;
-$fn = 200;
+//$fa = 0.5;
+//$fn = 200;
 
 //624_bearing(cutout=false);
 

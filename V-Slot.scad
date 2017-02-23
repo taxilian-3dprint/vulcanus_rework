@@ -7,7 +7,7 @@ part = "20x Extrusion"; //[20x Extrusion, Wheel, OpenRail, 20mm Gantry Plate, Un
 //length = 20;
 
 /*[Hidden]*/
-$fn=100;
+//$fn=100;
 delta=0.01;
 tolerance = 0.2;
 
